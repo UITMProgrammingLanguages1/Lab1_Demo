@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using InvoiceApplication.BusinessLogic;
 
 namespace InvoiceApplication
 {
@@ -27,26 +27,8 @@ namespace InvoiceApplication
             var path = pathTextBox.Text;
             var lines = File.ReadAllLines(path);
 
-            var entries = new Dictionary<string, decimal>();
-
-            for (int i = 1; i < lines.Length; i++)
-            {
-                var line = lines[i];
-
-                var split = line.Split(";");
-
-                var category = split[2];
-                var price = decimal.Parse(split[1]);
-
-                if (entries.ContainsKey(category))
-                {
-                    entries[category] += price;
-                }
-                else
-                {
-                    entries[category] = price;
-                }
-            }
+            var processor = new InvoiceProcessor();
+            var entries = processor.GroupByCategory(lines);
 
             resultTextBox.Clear();
             resultTextBox.Text += "Category\tAmount\r\n";
@@ -55,7 +37,6 @@ namespace InvoiceApplication
             {
                 resultTextBox.Text += $"{item.Key}\t{item.Value}{Environment.NewLine}";
             }
-
         }
     }
 }

@@ -16,4 +16,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceApplication.BusinessLogic\InvoiceApplication.BusinessLogic.csproj" />
+  </ItemGroup>
+
 </Project>
