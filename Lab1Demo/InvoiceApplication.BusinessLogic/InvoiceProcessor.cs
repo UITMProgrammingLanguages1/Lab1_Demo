@@ -2,29 +2,9 @@
 
 public class InvoiceProcessor
 {
-    public Dictionary<string, decimal> GroupByCategory(string[] lines)
-    {
-        var entries = new Dictionary<string, decimal>();
-
-        for (int i = 1; i < lines.Length; i++)
-        {
-            var line = lines[i];
-
-            var split = line.Split(";");
-
-            var category = split[2];
-            var price = decimal.Parse(split[1]);
-
-            if (entries.ContainsKey(category))
-            {
-                entries[category] += price;
-            }
-            else
-            {
-                entries[category] = price;
-            }
-        }
-
-        return entries;
-    }
+    public Dictionary<string, decimal> GroupByCategory(string[] lines) =>
+        lines.Skip(1)
+            .Select(x => x.Split(";"))
+            .GroupBy(x => x[2])
+            .ToDictionary(x => x.Key, x => x.Sum(y => decimal.Parse(y[1])));
 }
