@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using InvoiceApplication.BusinessLogic;
@@ -8,9 +7,12 @@ namespace InvoiceApplication
 {
     public partial class Form1 : Form
     {
-        public Form1()
+        private readonly InvoiceCalculator _invoiceCalculator;
+
+        public Form1(InvoiceCalculator invoiceCalculator)
         {
             InitializeComponent();
+            _invoiceCalculator = invoiceCalculator;
         }
 
         private void readButton_Click(object sender, EventArgs e)
@@ -28,8 +30,7 @@ namespace InvoiceApplication
             var path = pathTextBox.Text;
             var lines = File.ReadAllLines(path);
 
-            var processor = new InvoiceProcessor();
-            var entries = processor.GroupByCategory(lines);
+            var entries = _invoiceCalculator.GroupByCategory(lines);
 
             resultTextBox.Clear();
             resultTextBox.Text += "Category\tAmount\r\n";
@@ -38,7 +39,6 @@ namespace InvoiceApplication
             {
                 resultTextBox.Text += $"{item.Key}\t{item.Value}{Environment.NewLine}";
             }
-
         }
     }
 }
